@@ -1,0 +1,3 @@
+numpy
+open3d
+scikit_image

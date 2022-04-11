@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Vizzo
+  given-names: Ignacio
+- family-names: Stachniss
+  given-names: Cyrill
+title: "vdb_to_numpy"
+version: 0.1
+date-released: 2022-04-11
+url: "https://github.com/PRBonn/vdb_to_numpy"

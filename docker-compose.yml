@@ -1,0 +1,13 @@
+version: "3.4"
+services:
+  builder:
+    image: ignaciovizzo/vdb_to_numpy:latest
+    build:
+      context: .
+      dockerfile: docker/builder/Dockerfile
+  apps:
+    image: ignaciovizzo/vdb_to_numpy:mesh_to_sdf
+    build:
+      context: .
+      dockerfile: docker/apps/Dockerfile
+    working_dir: /apps
