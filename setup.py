@@ -22,7 +22,8 @@ class CMakeBuild(build_ext):
         if not extdir.endswith(os.path.sep):
             extdir += os.path.sep
 
-        cfg = "Debug" if self.debug else "Release"
+        debug = int(os.environ.get("DEBUG", 0)) if self.debug is None else self.debug
+        cfg = "Debug" if debug else "Release"
 
         # CMake lets you override the generator - we need to check this.
         # Can be set with Conda-Build, for example.
@@ -32,9 +33,9 @@ class CMakeBuild(build_ext):
         # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
         # from Python.
         cmake_args = [
-            "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
-            "-DPYTHON_EXECUTABLE={}".format(sys.executable),
-            "-DCMAKE_BUILD_TYPE={}".format(cfg),
+            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
         ]
         build_args = []
 
@@ -43,7 +44,7 @@ class CMakeBuild(build_ext):
 
         # Multi-config generators have a different way to specify configs
         if not single_config:
-            cmake_args += ["-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}".format(cfg.upper(), extdir)]
+            cmake_args += [f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}"]
             build_args += ["--config", cfg]
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level across all generators.
@@ -53,7 +54,7 @@ class CMakeBuild(build_ext):
             # parallel jobs so far, we are going to hack it here. Not the best design, but pip just
             # doesn't seem to care about this flag, CMake 3.12+ only.
             self.parallel = multiprocessing.cpu_count() if not self.parallel else self.parallel
-            build_args += ["-j{}".format(self.parallel)]
+            build_args += [f"-j{self.parallel}"]
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
