@@ -62,7 +62,26 @@ class TestData:
             url = os.path.join(STANDFORD_BASE_URL, self.tar_orig)
             urllib.request.urlretrieve(url, self.tar_path)
             with tarfile.open(self.tar_path) as tar:
-                tar.extractall(path=os.path.dirname(self.ply_path))
+                def is_within_directory(directory, target):
+                    
+                    abs_directory = os.path.abspath(directory)
+                    abs_target = os.path.abspath(target)
+                
+                    prefix = os.path.commonprefix([abs_directory, abs_target])
+                    
+                    return prefix == abs_directory
+                
+                def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+                
+                    for member in tar.getmembers():
+                        member_path = os.path.join(path, member.name)
+                        if not is_within_directory(path, member_path):
+                            raise Exception("Attempted Path Traversal in Tar File")
+                
+                    tar.extractall(path, members, numeric_owner=numeric_owner) 
+                    
+                
+                safe_extract(tar, path=os.path.dirname(self.ply_path))
             os.remove(self.tar_path)
             self._post_download_ply()
 
