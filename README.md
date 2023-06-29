@@ -6,7 +6,6 @@ created to work with [vdbfusion](https://github.com/PRBonn/vdbfusion)
 ## Dependencies
 
 - OpenVDB, please check official documentation.
-- [manifold_python](https://github.com/PRBonn/manifold_python.git)
 - Check the [Dockerfile](./docker/builder/Dockerfile) for more details ...
 
 ## Usage

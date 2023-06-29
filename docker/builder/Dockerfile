@@ -40,13 +40,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libusb-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install manifold package
-RUN git clone --recurse-submodules https://github.com/PRBonn/manifold_python.git \
-  && cd manifold_python \
-  && make install\
-  && cd ..\
-  && rm -rf /manifold
-
 # Install Python dependencies
 RUN pip3 install --upgrade pip
 RUN pip3 install --upgrade \

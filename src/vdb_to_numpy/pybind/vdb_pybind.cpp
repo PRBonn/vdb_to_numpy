@@ -13,7 +13,6 @@
 #include <vector>
 
 #include "BlendGrids.hpp"
-#include "MarchingCubes.h"
 
 PYBIND11_MAKE_OPAQUE(std::vector<Eigen::Vector3d>)
 PYBIND11_MAKE_OPAQUE(std::vector<Eigen::Vector3i>)
@@ -61,7 +60,6 @@ PYBIND11_MODULE(vdb_pybind, m) {
           "(8, 8, 8) grid containing the floating point values of the leaf "
           "node.",
           "grid"_a);
-    m.def("_extract_triangle_mesh", &ExtractTriangleMesh);
     m.def("_blend_grids", &BlendGrids, "grid_a"_a, "grid_b"_a, "eta"_a);
     m.def("_normalize_grid", &NormalizeGrid, "grid"_a);
 }

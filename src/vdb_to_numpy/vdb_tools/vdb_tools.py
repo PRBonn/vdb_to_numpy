@@ -5,8 +5,6 @@ import numpy as np
 import open3d as o3d
 import pyopenvdb as vdb
 
-from ..utils import extract_mesh
-
 
 def mesh_to_level_set(mesh, voxel_size, half_width=3):
     return vdb.FloatGrid.createLevelSetFromPolygons(
@@ -25,13 +23,6 @@ def level_set_to_triangle_mesh(grid):
         triangles=o3d.utility.Vector3iVector(faces),
     )
     mesh.compute_vertex_normals()
-    return mesh
-
-
-def sdf_level_set_to_triangle_mesh(grid):
-    sdf_volume, origin = level_set_to_numpy(grid)
-    mesh = extract_mesh(sdf_volume)
-    mesh.translate(origin)
     return mesh
 
 
